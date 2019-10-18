@@ -32,7 +32,8 @@ class DocumentsController extends Controller {
   }
 
   public function delete(Request $request) {
-    $filename = json_decode($request->getContent())->file;
+    $req = json_decode($request->getContent());
+    $filename = $req->file;
     $deleted = false;
     if (Storage::exists('./uploads'.'/'.$filename)) {
         Storage::delete('./uploads'.'/'.$filename);

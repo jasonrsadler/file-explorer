@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import FileGrid from './components/Filegrid'
+import FileInput from './components/FileInput'
+import './App.css'
+const url = 'http://localhost:8000/api/documents'
 
-class App extends Component {
+class App extends Component {  
   constructor() {
     super();
     this.handleSubmit=this.handleSubmit.bind(this);
     this.state = {
-      files: []
+      files: [],
+      inputFile: '',
+      submitEnabled: false
     }
     this.getServerFiles()
   }
 
   getServerFiles = () => {
-    fetch('http://localhost:8000/api/documents', {
+    fetch(url, {
       method: 'GET'
     })
     .catch(err => console.log(err))
@@ -20,48 +25,57 @@ class App extends Component {
     .then(data => {
       this.setState({
         files: data
-      })
+      }) 
     })
   }
 
   handleSubmit(event){
-      event.preventDefault();
-      const fileInput = document.querySelector('#fileupload') ;
-      const formData = new FormData();
-      //console.log(fileInput.files[0])
-      formData.append('file', fileInput.files[0]);
-      for (let key of formData.entries()) {
-        console.log(key[0] + ', ' + key[1]);
-      }
-      console.log(formData.entries())
-      fetch('http://localhost:8000/api/documents', {
-        method: 'POST',
-        body: formData
-      })
-      .catch(err => console.log(err))
-      .then(res => res.json())
-      .then(data => {
-          console.log(JSON.parse(data))
-      })
-
-  }
-
-  deleteFile = (filename) => {
-    console.log(filename)
-    fetch('http://localhost:8000/api/documents', {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: {
-        file: filename
-      }
+    this.setState({
+      inputFile: '',
+      submitEnabled: false
+    })
+    event.preventDefault();
+    const fileInput = document.querySelector('#fileupload');
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    fetch(url, {
+      method: 'POST',
+      body: formData
     })
     .catch(err => console.log(err))
     .then(res => res.json())
     .then(data => {
       console.log(data)
+      this.getServerFiles()
+    })
+  }
+
+  deleteFile = (filename) => {
+    const fetchBody = {
+      file: filename
+    }
+    console.log(filename)
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(fetchBody)
+    })
+    .catch(err => console.log(err))
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      this.getServerFiles()
+    })
+  }
+
+  inputChanged = (e) => {
+    const filename = e.target.value.substring(e.target.value.lastIndexOf('\\') + 1)
+    this.setState({
+      inputFile: filename + ' ready for upload',
+      submitEnabled: true
     })
   }
 
@@ -69,16 +83,21 @@ class App extends Component {
     const { files } = this.state
     return (
       <div className="App">
-        <form method="POST" id="upload-file" onSubmit={this.handleSubmit} encType="multipart/form-data">
-          <input id="fileupload" type="file" name="image" required />
-          <button type="submit" id="btnUploadFile">Upload File</button>
-        </form>
+        <div className="title">
+          Kraken File Explorer Assessment
+        </div>
+        <FileInput 
+          inputFile={this.state.inputFile}
+          inputChanged={this.inputChanged}
+          handleSubmit={this.handleSubmit}
+          submitEnabled={this.state.submitEnabled}
+        />
         {
-        files.length ? 
-          <FileGrid 
-            files={files} 
-            onDelete={this.deleteFile}/>
-          : null
+          files.length ? 
+            <FileGrid 
+              files={files} 
+              onDelete={this.deleteFile}/>
+            : null
         }
       </div>
     );
