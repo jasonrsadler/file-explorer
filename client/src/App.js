@@ -1,74 +1,33 @@
 import React, { Component } from 'react';
-import FileGrid from './components/Filegrid'
-import FileInput from './components/FileInput'
+import FileGrid from './components/filegrid'
+import FileInput from './components/fileInput'
 import './App.css'
-const url = 'http://localhost:8000/api/documents'
+import { connect } from 'react-redux'
+import * as actions from './actions/documentActions'
+import { bindActionCreators } from '../../../../../Users/Jason/AppData/Local/Microsoft/TypeScript/3.6/node_modules/redux';
 
 class App extends Component {  
-  constructor() {
-    super();
-    this.handleSubmit=this.handleSubmit.bind(this);
-    this.state = {
-      files: [],
-      inputFile: '',
-      submitEnabled: false
-    }
-    this.getServerFiles()
+  get actions () {
+    return this.props.actions
+  }
+
+  componentDidMount () {
+    actions.getDocuments()
   }
 
   getServerFiles = () => {
-    fetch(url, {
-      method: 'GET'
-    })
-    .catch(err => console.log(err))
-    .then(res => res.json())
-    .then(data => {
-      this.setState({
-        files: data
-      }) 
-    })
+    actions.getDocuments()
   }
 
   handleSubmit(event){
-    this.setState({
-      inputFile: '',
-      submitEnabled: false
-    })
     event.preventDefault();
     const fileInput = document.querySelector('#fileupload');
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
-    fetch(url, {
-      method: 'POST',
-      body: formData
-    })
-    .catch(err => console.log(err))
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-      this.getServerFiles()
-    })
   }
 
   deleteFile = (filename) => {
-    const fetchBody = {
-      file: filename
-    }
-    console.log(filename)
-    fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(fetchBody)
-    })
-    .catch(err => console.log(err))
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-      this.getServerFiles()
-    })
+    
   }
 
   inputChanged = (e) => {
@@ -80,17 +39,17 @@ class App extends Component {
   }
 
   render () {
-    const { files } = this.state
+    const { files, inputFile, submitEnabled } = this.props
     return (
       <div className="App">
         <div className="title">
           Kraken File Explorer Assessment
         </div>
         <FileInput 
-          inputFile={this.state.inputFile}
+          inputFile={inputFile}
           inputChanged={this.inputChanged}
           handleSubmit={this.handleSubmit}
-          submitEnabled={this.state.submitEnabled}
+          submitEnabled={submitEnabled}
         />
         {
           files.length ? 
@@ -104,4 +63,24 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return { files: state.files }
+}
+
+export const mapDispatchToProps = (dispatch) => {
+  const {
+    getDocuments,
+    uploadDocument,
+    deleteDocument
+  } = actions
+  return bindActionCreators({
+    getDocuments,
+    uploadDocument,
+    deleteDocument
+  }, dispatch)
+}
+
+export default connect(
+  mapStateToProps, 
+  mapDispatchToProps
+)(App)

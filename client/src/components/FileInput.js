@@ -1,10 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
-class FileInput extends Component {
-  constructor(props) {
-    super(props)
-  }
-
+class FileInput extends PureComponent {
   render () {
     const { inputFile, submitEnabled, inputChanged, handleSubmit } = this.props
     return (
