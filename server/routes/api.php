@@ -15,10 +15,6 @@ use Illuminate\Http\Request;
 
 Route::get('documents', 'DocumentsController@index');
 
-Route::get('documents/{document}', 'DocumentsController@show');
-
 Route::post('documents', 'DocumentsController@store');
 
-Route::put('documents/{document}', 'DocumentsController@update');
-
-Route::delete('documents/{document}', 'DocumentsController@delete');
+Route::delete('documents', 'DocumentsController@delete');
