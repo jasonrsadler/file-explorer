@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('documents', 'DocumentsController@index');
+Route::get('documents', 'DocumentController@index');
 
-Route::post('documents', 'DocumentsController@store');
+Route::post('documents', 'DocumentController@store');
 
-Route::delete('documents', 'DocumentsController@delete');
+Route::delete('documents', 'DocumentController@destroy');

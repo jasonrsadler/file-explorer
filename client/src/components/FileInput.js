@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react'
 
 class FileInput extends PureComponent {
   render () {
-    const { inputFile, submitEnabled, inputChanged, handleSubmit } = this.props
+    const { inputFile, submitEnabled, inputChanged, uploadDocument } = this.props
     return (
       <div className="input-container">
         <div className="input">
-          <form method="POST" id="upload-file" onSubmit={handleSubmit} encType="multipart/form-data">
+          <form method="POST" id="upload-file" onSubmit={uploadDocument} encType="multipart/form-data">
             <div className="inputflex">
               <div>
                 <input onChange={inputChanged} id="fileupload" type="file" name="file" className="inputfile" required />              

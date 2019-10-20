@@ -1,70 +1,57 @@
 import types from '../constants/actionTypes'
+import urlFetchers from '../utils/fetchers'
 
 export const defaultState = {
   files: [],
   inputFile: '',
   submitEnabled: false
 }
-const url = 'http://localhost:8000/api/documents'
 
-function documentReducer(state={files: []}, action) {
+function documentReducer(state=defaultState, action) {
   const payload = action.payload
-  console.log(JSON.stringify(action.actionType))
-  switch(types) {
-    
+  switch(action.type) {    
     case types.GET_DOCUMENTS:
-      console.log('getting documents')
-      fetch(url, {
-        method: 'GET'
-      })
-      .catch(err => console.log(err))
-      .then(res => res.json())
-      .then(data => {
-        state = { ...state }
-        console.log(JSON.stringify(data))
-        state.files = data
-      })
+      urlFetchers.getDocuments()
+      break
+    case types.ON_GET_DOCUMENTS:
+      state = { ...state }
+      state.files = payload.response
       break
     case types.DELETE_DOCUMENT:
-        const fetchBody = {
-          file: payload.filename
-        }
-        console.log(payload.filename)
-        fetch(url, {
-          method: 'DELETE',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(fetchBody)
-        })
-        .catch(err => console.log(err))
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
-          this.getServerFiles()
-        })
-      break 
+      urlFetchers.deleteDocument(payload.fetchBody)
+      break
+    case types.ON_DOCUMENT_DELETE:
+      state = { ...state }
+      if (!payload.response.status) {
+        state.serverError = true
+      } else {
+        urlFetchers.getDocuments()
+      }
+      break
     case types.UPLOAD_DOCUMENT:
-        this.setState({
-          inputFile: '',
-          submitEnabled: false
-        })
-        
-        fetch(url, {
-          method: 'POST',
-          body: payload.formData
-        })
-        .catch(err => console.log(err))
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
-          this.getServerFiles()
-        })
+      urlFetchers.uploadDocument(payload.formData)
+      break  
+    case types.ON_DOCUMENT_UPLOAD:
+      state = { ...state }
+      if (payload.response.status !== 'success') {
+        console.log('serverError')
+        state.serverError = true
+      } else {
+        state.inputFile = ''
+        state.submitEnabled = false
+        state.serverError = false
+      }
+      
+      urlFetchers.getDocuments()
+      break
+    case types.ON_FILE_SUBMIT_CHANGED:
+      state = { ...state }
+      state.inputFile = payload.filename + ' ready for upload'
+      state.submitEnabled = true
       break
     default:
-      return state
   }
+  return state
 }
 
 export default documentReducer;

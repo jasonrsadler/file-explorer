@@ -122,11 +122,14 @@
 .filegrid-header {
   width:100%;
   background-color: cadetblue;
-  border-radius: 5px 5px 0 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin: auto;
+}
+
+.filegrid-filter {
+  border-radius: 5px 5px 0 0;
 }
 
 .filegrid-header-column {
@@ -174,4 +177,8 @@
   cursor: pointer;
   background-color: darkred;
   border-color: firebrick;
+}
+
+.server-error {
+  color: red;
 }

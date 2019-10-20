@@ -1,22 +1,49 @@
 import actionTypes from '../constants/actionTypes'
 
-export const uploadDocument = (filename) => {
-    return {
-        type: actionTypes.UPLOAD_DOCUMENT,
-        payload: filename
-    }
+export const uploadDocument = (formData) => {
+  return {
+    type: actionTypes.UPLOAD_DOCUMENT,
+    payload: { formData }
+  }
+}
+
+export const onDocumentUpload = (response) => {
+  return {
+    type: actionTypes.ON_DOCUMENT_UPLOAD,
+    payload: { response }
+  }
 }
 
 export const getDocuments = () => {
-  console.log('action documents')
   return {
-    actionType: actionTypes.GET_DOCUMENTS
+    type: actionTypes.GET_DOCUMENTS
   }
 }
 
-export const deleteDocument = (filename) => {
+export const onGetDocuments = (response) => {
+  return {
+    type: actionTypes.ON_GET_DOCUMENTS,
+    payload: { response }
+  }
+}
+
+export const deleteDocument = (fetchBody) => {
   return {
     type: actionTypes.DELETE_DOCUMENT,
-    payload: filename
+    payload: { fetchBody }
   }
+}
+
+export const onDocumentDelete = (response) => {
+  return {
+    type: actionTypes.ON_DOCUMENT_DELETE,
+    payload: { response }
+  }
+}
+
+export const onFileSubmitChanged = (filename) => {
+  return ({
+    type: actionTypes.ON_FILE_SUBMIT_CHANGED,
+    payload: { filename }
+  })
 }

@@ -4,42 +4,39 @@ import FileInput from './components/fileInput'
 import './App.css'
 import { connect } from 'react-redux'
 import * as actions from './actions/documentActions'
-import { bindActionCreators } from '../../../../../Users/Jason/AppData/Local/Microsoft/TypeScript/3.6/node_modules/redux';
 
 class App extends Component {  
+  constructor(props) {
+    super(props);
+    this.props.getDocuments()
+  }
+
   get actions () {
     return this.props.actions
   }
 
-  componentDidMount () {
-    actions.getDocuments()
-  }
-
-  getServerFiles = () => {
-    actions.getDocuments()
-  }
-
-  handleSubmit(event){
-    event.preventDefault();
+  uploadDocument = (e) =>{
+    e.preventDefault();
     const fileInput = document.querySelector('#fileupload');
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
+    this.props.uploadDocument(formData)
   }
 
   deleteFile = (filename) => {
-    
+    const fetchBody = {
+      file: filename
+    }
+    this.props.deleteDocument(fetchBody)
   }
 
   inputChanged = (e) => {
     const filename = e.target.value.substring(e.target.value.lastIndexOf('\\') + 1)
-    this.setState({
-      inputFile: filename + ' ready for upload',
-      submitEnabled: true
-    })
+    this.props.inputChanged(filename)
   }
 
   render () {
-    const { files, inputFile, submitEnabled } = this.props
+    const { files, inputFile, submitEnabled, serverError } = this.props
     return (
       <div className="App">
         <div className="title">
@@ -48,9 +45,16 @@ class App extends Component {
         <FileInput 
           inputFile={inputFile}
           inputChanged={this.inputChanged}
-          handleSubmit={this.handleSubmit}
+          uploadDocument={this.uploadDocument}
           submitEnabled={submitEnabled}
         />
+        {
+          serverError ?
+            <div className='server-error'>
+              An error occurred performing the operation
+            </div>
+          : null
+        }
         {
           files.length ? 
             <FileGrid 
@@ -59,25 +63,34 @@ class App extends Component {
             : null
         }
       </div>
-    );
+    )
   }
 }
 
 const mapStateToProps = (state) => {
-  return { files: state.files }
+  return ({
+    inputFile: state.inputFile,
+    submitEnabled: state.submitEnabled,
+    files: state.files,
+    serverError: state.serverError
+  })
 }
 
 export const mapDispatchToProps = (dispatch) => {
-  const {
-    getDocuments,
-    uploadDocument,
-    deleteDocument
-  } = actions
-  return bindActionCreators({
-    getDocuments,
-    uploadDocument,
-    deleteDocument
-  }, dispatch)
+  return ({
+    uploadDocument: (formData) => {
+      dispatch(actions.uploadDocument(formData))
+    },
+    inputChanged: (filename) => {
+      dispatch(actions.onFileSubmitChanged(filename))
+    },
+    getDocuments: () => {
+      dispatch(actions.getDocuments())
+    },
+    deleteDocument: (fetchBody) => {
+      dispatch(actions.deleteDocument(fetchBody))
+    }
+  })
 }
 
 export default connect(
