@@ -36,7 +36,14 @@ class App extends Component {
   }
 
   render () {
-    const { files, inputFile, submitEnabled, serverError } = this.props
+    const { 
+      files, 
+      inputFile, 
+      submitEnabled, 
+      serverError, 
+      apiUnset 
+    } = this.props
+    
     return (
       <div className="App">
         <div className="title">
@@ -62,6 +69,13 @@ class App extends Component {
               onDelete={this.deleteFile}/>
             : null
         }
+        {
+          apiUnset ?
+            <div className='server-error'>
+              API key is not set
+            </div>
+          : null
+        }
       </div>
     )
   }
@@ -72,7 +86,8 @@ const mapStateToProps = (state) => {
     inputFile: state.inputFile,
     submitEnabled: state.submitEnabled,
     files: state.files,
-    serverError: state.serverError
+    serverError: state.serverError,
+    apiUnset: state.apiUnset
   })
 }
 

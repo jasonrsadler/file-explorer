@@ -4,7 +4,9 @@ import urlFetchers from '../utils/fetchers'
 export const defaultState = {
   files: [],
   inputFile: '',
-  submitEnabled: false
+  submitEnabled: false,
+  serverError: false,
+  apiUnset: false
 }
 
 function documentReducer(state=defaultState, action) {
@@ -48,6 +50,10 @@ function documentReducer(state=defaultState, action) {
       state = { ...state }
       state.inputFile = payload.filename + ' ready for upload'
       state.submitEnabled = true
+      break
+    case types.API_UNSET:
+      state = { ...state }
+      state.apiUnset = true
       break
     default:
   }

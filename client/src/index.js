@@ -35,8 +35,13 @@ function onDocumentDelete (data) {
   getActions().onDocumentDelete(data)
 }
 
+function apiUnset () {
+  getActions().apiUnset()
+}
+
 export {
   onDocumentUpload,
   onGetDocuments,
-  onDocumentDelete
+  onDocumentDelete,
+  apiUnset
 }

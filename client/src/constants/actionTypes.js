@@ -5,7 +5,8 @@ const types = {
   ON_DOCUMENT_DELETE: '@@kraken/ON_DOCUMENT_DELETE',
   GET_DOCUMENTS: '@@kraken/GET_DOCUMENTS',
   ON_GET_DOCUMENTS: '@@kraken/ON_GET_DOCUMENTS',
-  ON_FILE_SUBMIT_CHANGED: '@@kraken/ON_FILE_SUBMIT_CHANGED'
+  ON_FILE_SUBMIT_CHANGED: '@@kraken/ON_FILE_SUBMIT_CHANGED',
+  API_UNSET: '@@kraken/API_UNSET'
 }
 
 export default types

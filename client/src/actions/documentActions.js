@@ -47,3 +47,9 @@ export const onFileSubmitChanged = (filename) => {
     payload: { filename }
   })
 }
+
+export const apiUnset = () => {
+  return ({
+    type: actionTypes.API_UNSET
+  })
+}

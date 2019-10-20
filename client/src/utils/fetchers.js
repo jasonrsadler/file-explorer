@@ -5,13 +5,19 @@ const urlFetchers = {
   uploadDocument: (formData) => {
     fetch(url, {
       method: 'POST',
+      headers: {
+        apiToken: process.env.REACT_APP_API_KEY
+      },
       body: formData
     })
     .catch(err => console.error(err))
     .then(res => res.json())
     .then(data => {
-      console.log('error')
-      actions.onDocumentUpload(data)
+      if (data === 'Unauthorized') {
+        actions.apiUnset()
+      } else {
+        actions.onDocumentUpload(data)
+      }
     })    
   },
   deleteDocument: (fetchBody) => {
@@ -20,23 +26,36 @@ const urlFetchers = {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        apiToken: process.env.REACT_APP_API_KEY
       },
       body: JSON.stringify(fetchBody)
     })
     .catch(err => console.error(err))
     .then(res => res.json())
     .then(data => {
-      actions.onDocumentDelete(data)
+      if (data === 'Unauthorized') {
+        actions.apiUnset()
+      } else {
+        actions.onDocumentDelete(data)
+      }
     })
   },
   getDocuments: () => {
+    console.log(process.env.REACT_APP_API_KEY)
     fetch(url, {
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        apiToken: process.env.REACT_APP_API_KEY
+      }
     })
     .catch(err => console.error(err))
     .then(res => res.json())
     .then(data => {
-      actions.onGetDocuments(data)
+      if (data === 'Unauthorized') {
+        actions.apiUnset()
+      } else {
+        actions.onGetDocuments(data)
+      }
     })
   }
 }

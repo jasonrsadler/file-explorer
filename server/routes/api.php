@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('documents', 'DocumentController@index');
+Route::get('documents', 'DocumentController@index')->middleware('api_token');
 
-Route::post('documents', 'DocumentController@store');
+Route::post('documents', 'DocumentController@store')->middleware('api_token');
 
-Route::delete('documents', 'DocumentController@destroy');
+Route::delete('documents', 'DocumentController@destroy')->middleware('api_token');
