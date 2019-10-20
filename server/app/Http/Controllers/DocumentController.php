@@ -22,8 +22,8 @@ class DocumentController extends Controller {
 
   public function store(Request $request) {
     if ($request->hasFile('file')) {
-      $name=$request->file('file')->getClientOriginalName();
-      $path = $request->file('file')->storeAs('uploads', $name);
+      $name = e($request->file('file')->getClientOriginalName());
+      $path = e($request->file('file')->storeAs('uploads', $name));
       return ($path !== NULL ?
       response()->json(array('status' => 'success', 'message' => 'File successfully uploaded', 'uploaded-path' => '/storage/uploads/'.$name))
       : response()->json(array('status' => 'error', 'message' => 'Failed to upload file')));
@@ -34,7 +34,7 @@ class DocumentController extends Controller {
 
   public function destroy(Request $request) {
     $req = json_decode($request->getContent());
-    $filename = $req->file;
+    $filename = e($req->file);
     $deleted = false;
     if (Storage::exists('./uploads'.'/'.$filename)) {
         Storage::delete('./uploads'.'/'.$filename);
