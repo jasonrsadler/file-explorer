@@ -41,7 +41,6 @@ const urlFetchers = {
     })
   },
   getDocuments: () => {
-    console.log(process.env.REACT_APP_API_KEY)
     fetch(url, {
       method: 'GET',
       headers: {

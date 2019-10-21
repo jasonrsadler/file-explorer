@@ -36,7 +36,6 @@ function documentReducer(state=defaultState, action) {
     case types.ON_DOCUMENT_UPLOAD:
       state = { ...state }
       if (payload.response.status !== 'success') {
-        console.log('serverError')
         state.serverError = true
       } else {
         state.inputFile = ''

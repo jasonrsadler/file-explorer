@@ -4,11 +4,33 @@
 
 This is a solution for uploading and managing documents for Kraken Assessment. Use cases implement uploading documents, viewing previously uploaded documents, and deleting previously uploaded documents.
 
-## Quick Start
+# Quick Start
+
+## Docker Installation
+
+To start:
+```
+git clone https://github.com/jasonrsadler/file-explorer.git
+cd server
+docker build -t server:latest .
+cd ../client
+docker build -t client:latest .
+cd ..
+docker-compose up
+```
+Then run application from [http://localhost](http://localhost)
+
+## Self Installation
+
+### Prerequisites
+Node 10+
+PHP 7+
+Composer
 
 To start:
 
 ```
+git clone https://github.com/jasonrsadler/file-explorer.git
 cd server
 composer install
 php artisan serve
@@ -27,6 +49,10 @@ This is the first time I've done anything with Laravel, so much research was pla
 ## API Keys
 
 'Dummy' API keys have been set in `server/.env` and also in `client/.env`. Under normal security practices, these files would never be checked in, but are provided here for convenience in running the application.
+
+## Limitations
+
+File uploads to Laravel endpoints is limited to the default 2MB limit
 
 ## Implementations
 
