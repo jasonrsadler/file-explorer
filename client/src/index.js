@@ -39,9 +39,14 @@ function apiUnset () {
   getActions().apiUnset()
 }
 
+function onServerError () {
+  getActions().onServerError()
+}
+
 export {
   onDocumentUpload,
   onGetDocuments,
   onDocumentDelete,
-  apiUnset
+  apiUnset,
+  onServerError
 }

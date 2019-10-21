@@ -6,7 +6,8 @@ const types = {
   GET_DOCUMENTS: '@@kraken/GET_DOCUMENTS',
   ON_GET_DOCUMENTS: '@@kraken/ON_GET_DOCUMENTS',
   ON_FILE_SUBMIT_CHANGED: '@@kraken/ON_FILE_SUBMIT_CHANGED',
-  API_UNSET: '@@kraken/API_UNSET'
+  API_UNSET: '@@kraken/API_UNSET',
+  ON_SERVER_ERROR: '@@kraken/ON_SERVER_ERROR'
 }
 
 export default types

@@ -53,3 +53,9 @@ export const apiUnset = () => {
     type: actionTypes.API_UNSET
   })
 }
+
+export const onServerError = () => {
+  return ({
+    type: actionTypes.ON_SERVER_ERROR
+  })
+}

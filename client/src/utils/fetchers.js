@@ -11,7 +11,13 @@ const urlFetchers = {
       body: formData
     })
     .catch(err => console.error(err))
-    .then(res => res.json())
+    .then(res => { 
+      if (res) {
+        return res.json()
+      } else {
+        actions.onServerError()
+      }
+    })
     .then(data => {
       if (data === 'Unauthorized') {
         actions.apiUnset()
@@ -31,7 +37,13 @@ const urlFetchers = {
       body: JSON.stringify(fetchBody)
     })
     .catch(err => console.error(err))
-    .then(res => res.json())
+    .then(res => { 
+      if (res) {
+        return res.json()
+      } else {
+        actions.onServerError()
+      }
+    })
     .then(data => {
       if (data === 'Unauthorized') {
         actions.apiUnset()
@@ -48,7 +60,13 @@ const urlFetchers = {
       }
     })
     .catch(err => console.error(err))
-    .then(res => res.json())
+    .then(res => { 
+      if (res) {
+        return res.json()
+      } else {
+        actions.onServerError()
+      }
+    })
     .then(data => {
       if (data === 'Unauthorized') {
         actions.apiUnset()

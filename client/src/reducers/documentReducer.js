@@ -28,6 +28,7 @@ function documentReducer(state=defaultState, action) {
         state.serverError = true
       } else {
         urlFetchers.getDocuments()
+        state.serverError = false
       }
       break
     case types.UPLOAD_DOCUMENT:
@@ -35,24 +36,28 @@ function documentReducer(state=defaultState, action) {
       break  
     case types.ON_DOCUMENT_UPLOAD:
       state = { ...state }
-      if (payload.response.status !== 'success') {
+      if (!payload.response || payload.response.status !== 'success') {
         state.serverError = true
       } else {
         state.inputFile = ''
         state.submitEnabled = false
         state.serverError = false
-      }
-      
+      }      
       urlFetchers.getDocuments()
       break
     case types.ON_FILE_SUBMIT_CHANGED:
       state = { ...state }
       state.inputFile = payload.filename + ' ready for upload'
       state.submitEnabled = true
+      state.serverError = false
       break
     case types.API_UNSET:
       state = { ...state }
       state.apiUnset = true
+      break
+    case types.ON_SERVER_ERROR:
+      state = { ...state }
+      state.serverError = true
       break
     default:
   }
